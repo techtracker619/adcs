@@ -1,0 +1,22 @@
+<#
+.SYNOPSIS
+    Installs Active Directory Domain Services (AD DS) and promotes the server to a Domain Controller
+
+.AUTHOR
+    Anthony Jenkins
+#>
+
+# --- Variables ---
+$DomainName = "bytecorp.local"
+$SafeModeAdminPassword = ConvertTo-SecureString "P@ssword123" -AsPlainText -Force
+
+# --- Install AD DS Role ---
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+# --- Promote Server to Domain Controller ---
+Install-ADDSForest `
+    -DomainName $DomainName `
+    -SafeModeAdministratorPassword $SafeModeAdminPassword `
+    -DomainNetbiosName "BYTECORP" `
+    -InstallDNS:$true `
+    -Force:$true
